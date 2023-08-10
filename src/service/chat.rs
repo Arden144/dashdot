@@ -1,76 +1,30 @@
 use crate::prelude::{api::*, *};
 
-pub struct ChatService {
-    db: DatabaseConnection,
-    connections: Arc<DashMap<i32, Sender<sync::Events>>>,
-}
-
-impl ChatService {
-    pub fn new(
-        db: DatabaseConnection,
-        connections: Arc<DashMap<i32, Sender<sync::Events>>>,
-    ) -> Self {
-        Self { db, connections }
-    }
-}
-
 #[tonic::async_trait]
-impl chat_server::Chat for ChatService {
+impl chat_server::Chat for ServiceContext {
     type SyncStream = Pin<Box<dyn Stream<Item = Result<sync::Events, Status>> + Send>>;
 
     async fn sync(&self, request: Request<sync::SyncInfo>) -> ApiResult<Self::SyncStream> {
         let user = request.user(&self.db).await?;
         let message = request.into_inner();
 
-        let since = message
+        let starting_at = message
             .last_updated
-            .ok_or_else(|| Status::failed_precondition("missing last_updated"))?
-            .into_db_date();
+            .ok_or_else(|| Status::failed_precondition("missing last_updated"))?;
 
-        let (notifier, closed) = oneshot::channel();
-        let (mut tx, rx) = mpsc::channel::<sync::Events>(128);
-        let rx = NotifyOnClose::new(notifier, rx);
+        let events = self.updater.get_updates(&user, &starting_at).await?;
 
-        tokio::spawn({
-            let connections = self.connections.clone();
-            async move {
-                closed.await.expect("notification channel canceled");
-                connections.remove(&user.id);
-            }
-        });
+        let rx = self.messenger.connect(user.id);
 
-        let now = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .expect("failed to get current time");
+        self.messenger
+            .send([user.id], events, false)
+            .await
+            .map_err(|e| {
+                error!("failed to send initial sync event: {e:?}");
+                Status::internal("an unexpected internal error occured")
+            })?;
 
-        let chats = db::chat::chats_by_user(&self.db, &user).await?;
-        let users = db::user::users_by_chats(&self.db, &chats).await?;
-        let msgs = db::msg::msgs_by_chats(&self.db, &chats, since).await?;
-        let members = db::helper::chat_members(&chats, &users);
-
-        let events = sync::Events {
-            last_updated: Some(now.into_api_date()),
-            events: chained![
-                chats.into_iter().map(Into::into),
-                users
-                    .into_iter()
-                    .flatten()
-                    .unique_by(|u| u.id)
-                    .map(Into::into),
-                msgs.into_iter().map(Into::into),
-                members.into_iter().map(Into::into)
-            ]
-            .collect(),
-        };
-
-        tx.send(events).await.map_err(|e| {
-            error!("failed to send initial sync event: {e:?}");
-            Status::internal("an unexpected internal error occured")
-        })?;
-
-        self.connections.insert(user.id, tx);
-
-        Ok(Response::new(rx.map(Ok).boxed()))
+        Ok(Response::new(rx))
     }
 
     async fn send_msg(&self, request: Request<msg::NewMsg>) -> ApiResult<msg::MsgSent> {
@@ -92,19 +46,18 @@ impl chat_server::Chat for ChatService {
         let event: sync::Event = msg.clone().into();
         let last_updated = msg.date.into_api_date();
 
-        for user in users {
-            let Some(mut tx) = self.connections.get_mut(&user.id) else { continue };
+        let events = sync::Events {
+            last_updated: Some(last_updated),
+            events: vec![event],
+        };
 
-            tx.send(sync::Events {
-                last_updated: Some(last_updated.clone()),
-                events: vec![event.clone()],
-            })
+        self.messenger
+            .send(users.into_iter().map(|u| u.id), events, true)
             .await
             .map_err(|e| {
-                error!("failed to send message event: {e:?}");
+                error!("failed to send message event: {:?}", anyhow::Error::from(e));
                 Status::internal("an unexpected internal error occured")
             })?;
-        }
 
         Ok(Response::new(msg.into()))
     }

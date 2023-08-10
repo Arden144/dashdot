@@ -7,7 +7,6 @@ edition = "2021"
 [workspace]
 members = [".", "entity", "migration"]
 
-
 [dependencies]
 entity = { path = "entity" }
 migration = { path = "migration" }
@@ -23,8 +22,9 @@ prost = "0.11.8"
 prost-types = "0.11.8"
 reqwest = { version = "0.11.15", features = ["json"] }
 serde = { version = "1.0.158", features = ["derive"] }
+serde_json = "1.0.103"
 thiserror = "1.0.40"
-tokio = { version = "1.26.0", features = ["rt-multi-thread"] }
+tokio = { version = "1.26.0", features = ["rt-multi-thread", "time"] }
 tonic = { version = "0.8.3", features = ["gzip"] }
 pin-project = "1.0.12"
 dashmap = "5.4.0"
@@ -35,6 +35,14 @@ futures-lite = "1.13.0"
 futures-channel = "0.3.28"
 futures-util = "0.3.28"
 pretty_env_logger = "0.5.0"
+hex = "0.4.3"
 
 [build-dependencies]
 tonic-build = "0.8.4"
+
+[profile.dist]
+inherits = "release"
+strip = "debuginfo"
+lto = "fat"
+panic = "abort"
+codegen-units = 1

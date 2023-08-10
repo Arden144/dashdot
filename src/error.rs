@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 #[derive(Error, Debug)]
-#[error("Handled database error: {}\nOriginal error:\n{source:?}", .status.message())]
+#[error("Handled database error: {}", .status.message())]
 pub struct HandledError {
     source: anyhow::Error,
     status: Status,
@@ -9,8 +9,9 @@ pub struct HandledError {
 
 impl From<HandledError> for Status {
     fn from(value: HandledError) -> Self {
-        info!("{value}");
-        value.status
+        let status = value.status.clone();
+        warn!("{:?}", anyhow::Error::from(value));
+        status
     }
 }
 

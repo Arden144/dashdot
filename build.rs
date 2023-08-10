@@ -8,6 +8,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "../shared/proto/chat.proto",
             "../shared/proto/sync.proto",
             "../shared/proto/auth.proto",
+            "../shared/proto/push.proto",
             "../shared/proto/api.proto",
         ],
         &["../shared/proto"],

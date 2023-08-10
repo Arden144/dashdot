@@ -1,22 +1,14 @@
+mod error;
 mod issue;
 mod revoke;
 mod verify;
 
+pub(self) use error::*;
 pub use issue::*;
 pub use revoke::*;
 pub use verify::*;
 
 use crate::prelude::*;
-
-#[derive(Error, Debug)]
-pub enum OAuthError {
-    #[error("tried to modify tokens for a user that doesn't exist")]
-    UserNotFound,
-    #[error("invalid refresh token")]
-    InvalidRefreshToken,
-    #[error("refresh token has already been used")]
-    RefreshTokenUsed,
-}
 
 pub struct Tokens {
     pub access_token: String,

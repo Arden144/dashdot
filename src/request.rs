@@ -23,6 +23,6 @@ impl<T> RequestExt<T> for Request<T> {
 
         db::user::user_by_sub(db, sub)
             .await?
-            .ok_or_else(|| Status::not_found("user does not exist"))
+            .ok_or_else(|| Status::permission_denied("user does not exist"))
     }
 }

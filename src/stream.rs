@@ -1,44 +1,59 @@
 use crate::prelude::*;
 
 #[pin_project(PinnedDrop)]
-pub struct NotifyOnClose<T> {
-    notifier: Option<oneshot::Sender<()>>,
+pub struct OnCloseWrapper<T, F>
+where
+    F: FnOnce() -> (),
+{
     #[pin]
-    receiver: mpsc::Receiver<T>,
+    wrapped: mpsc::Receiver<T>,
+    func: Option<F>,
 }
 
 #[pinned_drop]
-impl<T> PinnedDrop for NotifyOnClose<T> {
+impl<T, F> PinnedDrop for OnCloseWrapper<T, F>
+where
+    F: FnOnce() -> (),
+{
     fn drop(self: Pin<&mut Self>) {
         let this = self.project();
-        match this.notifier.take() {
-            Some(notifier) => notifier
-                .send(())
-                .expect("notifier receive channel dropped before notification sent"),
-
-            None => unreachable!("NotifyOnClose should never be created without a notifier"),
-        }
+        let func = this.func.take().expect("func should never be None");
+        func();
     }
 }
 
-impl<T> Stream for NotifyOnClose<T> {
+impl<T, F> Stream for OnCloseWrapper<T, F>
+where
+    F: FnOnce() -> (),
+{
     type Item = T;
 
     fn poll_next(self: Pin<&mut Self>, cx: &mut task::Context<'_>) -> Poll<Option<Self::Item>> {
         let this = self.project();
-        this.receiver.poll_next(cx)
+        this.wrapped.poll_next(cx)
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        self.receiver.size_hint()
+        self.wrapped.size_hint()
     }
 }
 
-impl<T> NotifyOnClose<T> {
-    pub fn new(notifier: oneshot::Sender<()>, receiver: mpsc::Receiver<T>) -> Self {
-        Self {
-            notifier: Some(notifier),
-            receiver,
+pub trait ChannelOnClose<T, F>
+where
+    Self: Sized,
+    F: FnOnce() -> (),
+{
+    fn on_close(self, func: F) -> OnCloseWrapper<T, F>;
+}
+
+impl<T, F> ChannelOnClose<T, F> for mpsc::Receiver<T>
+where
+    F: FnOnce() -> (),
+{
+    fn on_close(self, func: F) -> OnCloseWrapper<T, F> {
+        OnCloseWrapper {
+            wrapped: self,
+            func: Some(func),
         }
     }
 }

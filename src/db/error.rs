@@ -1,31 +1,32 @@
 use crate::prelude::*;
 
 #[derive(Error, Debug)]
-#[error("Unexpected database error: {context}\n\nCaused by: {source:?}")]
-pub struct UnexpectedDbError {
+#[error("Unexpected database error: {context}")]
+pub struct DatabaseError {
+    #[source]
     source: DbErr,
     context: String,
 }
 
-impl From<UnexpectedDbError> for Status {
-    fn from(value: UnexpectedDbError) -> Self {
+impl From<DatabaseError> for Status {
+    fn from(value: DatabaseError) -> Self {
         let context = value.context.clone();
         error!("{:?}", anyhow::Error::from(value));
         Status::internal(context)
     }
 }
 
-pub(super) trait DbErrExt<T> {
-    fn explanation<S: ToString>(self, context: S) -> DbResult<T>;
+pub(super) trait DatabaseResultExt<T> {
+    fn explanation(self, context: impl ToString) -> DatabaseResult<T>;
 }
 
-impl<T> DbErrExt<T> for Result<T, DbErr> {
-    fn explanation<S: ToString>(self, context: S) -> DbResult<T> {
-        self.map_err(|source| UnexpectedDbError {
+impl<T> DatabaseResultExt<T> for Result<T, DbErr> {
+    fn explanation(self, context: impl ToString) -> DatabaseResult<T> {
+        self.map_err(|source| DatabaseError {
             source,
             context: context.to_string(),
         })
     }
 }
 
-pub type DbResult<T> = Result<T, UnexpectedDbError>;
+pub type DatabaseResult<T> = Result<T, DatabaseError>;

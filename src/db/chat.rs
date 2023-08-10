@@ -1,17 +1,40 @@
 use crate::prelude::{db::*, *};
 pub use entity::chat::*;
 
-pub async fn chats_by_user(
-    db: &DatabaseConnection,
-    user: &user::Model,
-) -> DbResult<Vec<chat::Model>> {
-    user.find_related(chat::Entity)
-        .all(db)
-        .await
-        .explanation("failed to get user's chats from database")
+pub struct ChatUpdateSource {
+    db: DatabaseConnection,
 }
 
-pub async fn ensure_default_chat(db: &DatabaseConnection) -> DbResult<chat::Model> {
+impl ChatUpdateSource {
+    pub fn new(db: DatabaseConnection) -> Self {
+        Self { db }
+    }
+}
+
+impl UpdateSource for ChatUpdateSource {
+    type Item = chat::Model;
+
+    async fn get_updates(
+        &self,
+        for_user: &user::Model,
+        starting_at: DateTime,
+    ) -> UpdateResult<Vec<Self::Item>> {
+        let chats = for_user
+            .find_related(chat::Entity)
+            .filter(chat::Column::Date.gte(starting_at))
+            .all(&self.db)
+            .await
+            .explanation("failed to get user's chats from database")?;
+
+        for chat in chats.iter() {
+            debug!("sending chat: {chat:?}");
+        }
+
+        Ok(chats)
+    }
+}
+
+pub async fn ensure_default_chat(db: &DatabaseConnection) -> DatabaseResult<chat::Model> {
     let chat = chat::Entity::find_by_id(1)
         .one(db)
         .await

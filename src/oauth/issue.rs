@@ -5,15 +5,13 @@ static ENCODING_KEY: LazyLock<EncodingKey> = LazyLock::new(|| {
     EncodingKey::from_ec_pem(&private_key).unwrap()
 });
 
-pub async fn issue(db: &DatabaseConnection, user: db::user::Model) -> anyhow::Result<Tokens> {
+pub async fn issue(db: &DatabaseConnection, user: db::user::Model) -> Result<Tokens, OAuthError> {
     let iat = current_time().as_secs();
     let jti = Uuid::new_v4().hyphenated().to_string();
 
-    {
-        let mut user = db::user::ActiveModel::from(user.clone());
-        user.jti = Set(Some(jti.clone()));
-        user.update(db).await?;
-    }
+    let mut user: db::user::ActiveModel = user.into();
+    user.jti = Set(Some(jti.clone()));
+    let user = user.update(db).await?;
 
     let access_claims = AccessToken {
         iss: "com.ardensinclair.dashdot".to_owned(),

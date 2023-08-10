@@ -1,3 +1,5 @@
+use std::fmt;
+
 use sea_orm_migration::{prelude::*, sea_orm::DbBackend};
 
 use crate::{create_chat::Chat, create_user::User};
@@ -15,6 +17,14 @@ pub enum Msg {
 #[derive(DeriveMigrationName)]
 pub struct Migration;
 
+struct LocalTimestamp;
+
+impl Iden for LocalTimestamp {
+    fn unquoted(&self, s: &mut dyn fmt::Write) {
+        write!(s, "LOCALTIMESTAMP").unwrap();
+    }
+}
+
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
@@ -30,7 +40,12 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(Msg::Date).timestamp().not_null())
+                    .col(
+                        ColumnDef::new(Msg::Date)
+                            .timestamp()
+                            .not_null()
+                            .default(Func::cust(LocalTimestamp).arg(Expr::val(6))),
+                    )
                     .col(ColumnDef::new(Msg::Text).string().not_null())
                     .col(ColumnDef::new(Msg::UserId).integer().not_null())
                     .col(ColumnDef::new(Msg::ChatId).integer().not_null())

@@ -202,7 +202,7 @@ pub async fn validate_auth_code(code: &str, identity_token: &str) -> anyhow::Res
             .into_anyhow_err();
     }
 
-    let data = res
+    let _data = res
         .json::<TokenResponse>()
         .await
         .context("failed to deserialize token message")

@@ -9,7 +9,7 @@ name = "migration"
 path = "src/lib.rs"
 
 [dependencies]
-tokio = "1.28.1"
+tokio = { version = "1.26.0", features = ["macros", "rt-multi-thread"] }
 
 [dependencies.sea-orm-migration]
 version = "0.11.2"

@@ -2,7 +2,7 @@ use crate::prelude::{api::*, *};
 
 async fn join_default_chat(
     db: &DatabaseConnection,
-    connections: &DashMap<i32, Sender<api::sync::Events>>,
+    messenger: &Messenger,
     time: Timestamp,
     user: &db::user::Model,
 ) -> anyhow::Result<()> {
@@ -17,40 +17,25 @@ async fn join_default_chat(
         .await?
         .expect("missing default conversation");
 
-    for user in users {
-        let Some(mut tx) = connections.get_mut(&user.id) else { continue };
+    let events = api::sync::Events {
+        last_updated: Some(time),
+        events: vec![user.clone().into(), member.into()],
+    };
 
-        tx.send(api::sync::Events {
-            last_updated: Some(time.clone()),
-            events: vec![user.into(), member.clone().into()],
-        })
+    messenger
+        .send(users.into_iter().map(|u| u.id), events, true)
         .await
         .map_err(|e| {
             error!("failed to send events for user join: {e:?}");
             Status::internal("an unexpected internal error occured")
         })?;
-    }
 
     Ok(())
 }
 
-pub struct AuthService {
-    db: DatabaseConnection,
-    connections: Arc<DashMap<i32, Sender<sync::Events>>>,
-}
-
-impl AuthService {
-    pub fn new(
-        db: DatabaseConnection,
-        connections: Arc<DashMap<i32, Sender<sync::Events>>>,
-    ) -> Self {
-        Self { db, connections }
-    }
-}
-
 #[tonic::async_trait]
-impl auth_server::Auth for AuthService {
-    async fn pre_auth(&self, request: Request<auth::NewSession>) -> ApiResult<auth::Session> {
+impl auth_server::Auth for ServiceContext {
+    async fn pre_auth(&self, _request: Request<auth::NewSession>) -> ApiResult<auth::Session> {
         unimplemented!()
     }
 
@@ -90,7 +75,7 @@ impl auth_server::Auth for AuthService {
 
                 join_default_chat(
                     &self.db,
-                    &self.connections,
+                    &self.messenger,
                     current_time().into_api_date(), // TODO: this is probably wrong
                     &user,
                 )
