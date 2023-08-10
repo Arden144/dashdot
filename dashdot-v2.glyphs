@@ -1,0 +1,179 @@
+{
+.appVersion = "3151";
+.formatVersion = 3;
+DisplayStrings = (
+"",
+".",
+"//",
+"-.//.--.//... .- -.- --.-.//.-",
+" ",
+"-"
+);
+date = "2023-05-24 08:52:07 +0000";
+familyName = Dashdot;
+fontMaster = (
+{
+id = m01;
+metricValues = (
+{
+over = 16;
+pos = 800;
+},
+{
+over = 16;
+pos = 700;
+},
+{
+over = 16;
+pos = 500;
+},
+{
+over = -16;
+},
+{
+over = -16;
+pos = -200;
+},
+{
+over = -16;
+}
+);
+name = Regular;
+userData = {
+GSCornerRadius = 75;
+};
+}
+);
+glyphs = (
+{
+glyphname = space;
+lastChange = "2023-05-24 09:19:11 +0000";
+layers = (
+{
+layerId = m01;
+width = 500;
+}
+);
+unicode = 32;
+},
+{
+glyphname = period;
+lastChange = "2023-05-24 09:19:02 +0000";
+layers = (
+{
+layerId = m01;
+shapes = (
+{
+closed = 1;
+nodes = (
+(319,175,o),
+(375,231,o),
+(375,300,cs),
+(375,369,o),
+(319,425,o),
+(250,425,cs),
+(181,425,o),
+(125,369,o),
+(125,300,cs),
+(125,231,o),
+(181,175,o),
+(250,175,cs)
+);
+}
+);
+width = 500;
+}
+);
+unicode = 46;
+},
+{
+glyphname = slash;
+lastChange = "2023-05-24 09:22:10 +0000";
+layers = (
+{
+layerId = m01;
+shapes = (
+{
+closed = 1;
+nodes = (
+(568,-91,ls),
+(555,-139,o),
+(574,-171,o),
+(621,-183,cs),
+(621,-183,ls),
+(668,-195,o),
+(699,-177,o),
+(712,-130,cs),
+(933,691,ls),
+(946,739,o),
+(926,771,o),
+(879,783,cs),
+(879,783,ls),
+(832,795,o),
+(800,777,o),
+(788,730,cs)
+);
+}
+);
+width = 1500;
+}
+);
+unicode = 47;
+},
+{
+glyphname = hyphen;
+lastChange = "2023-05-24 09:20:18 +0000";
+layers = (
+{
+layerId = m01;
+shapes = (
+{
+closed = 1;
+nodes = (
+(125,242,o),
+(168,200,o),
+(227,200,cs),
+(773,200,ls),
+(832,200,o),
+(875,242,o),
+(875,300,cs),
+(875,358,o),
+(832,400,o),
+(773,400,cs),
+(227,400,ls),
+(168,400,o),
+(125,358,o),
+(125,300,cs)
+);
+}
+);
+width = 1000;
+}
+);
+unicode = 45;
+}
+);
+metrics = (
+{
+type = ascender;
+},
+{
+type = "cap height";
+},
+{
+type = "x-height";
+},
+{
+type = baseline;
+},
+{
+type = descender;
+},
+{
+type = "italic angle";
+}
+);
+unitsPerEm = 1000;
+versionMajor = 1;
+versionMinor = 0;
+}

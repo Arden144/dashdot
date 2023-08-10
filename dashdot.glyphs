@@ -1,0 +1,174 @@
+{
+.appVersion = "3151";
+.formatVersion = 3;
+DisplayStrings = (
+" ",
+".-//-. .-//-.",
+"-",
+"//",
+"."
+);
+date = "2023-05-21 00:16:45 +0000";
+familyName = Dashdot;
+fontMaster = (
+{
+id = m01;
+metricValues = (
+{
+over = 16;
+pos = 450;
+},
+{
+over = -16;
+},
+{
+over = -16;
+pos = -150;
+},
+{
+over = 16;
+pos = 300;
+}
+);
+name = Regular;
+userData = {
+GSCornerRadius = 40;
+};
+}
+);
+glyphs = (
+{
+glyphname = space;
+lastChange = "2023-05-21 01:03:45 +0000";
+layers = (
+{
+layerId = m01;
+width = 200;
+}
+);
+unicode = 32;
+},
+{
+glyphname = period;
+kernLeft = ".-";
+lastChange = "2023-05-24 08:51:21 +0000";
+layers = (
+{
+layerId = m01;
+shapes = (
+{
+closed = 1;
+nodes = (
+(128,100,o),
+(150,122,o),
+(150,150,cs),
+(150,178,o),
+(128,200,o),
+(100,200,cs),
+(72,200,o),
+(50,178,o),
+(50,150,cs),
+(50,122,o),
+(72,100,o),
+(100,100,cs)
+);
+}
+);
+width = 200;
+}
+);
+unicode = 46;
+},
+{
+glyphname = slash;
+lastChange = "2023-05-24 08:51:49 +0000";
+layers = (
+{
+layerId = m01;
+shapes = (
+{
+closed = 1;
+nodes = (
+(201,-101,ls),
+(196,-121,o),
+(204,-135,o),
+(222,-140,cs),
+(240,-145,o),
+(254,-137,o),
+(259,-117,cs),
+(399,401,ls),
+(404,421,o),
+(396,435,o),
+(378,440,cs),
+(360,445,o),
+(346,437,o),
+(341,417,cs)
+);
+}
+);
+width = 600;
+}
+);
+unicode = 47;
+},
+{
+glyphname = hyphen;
+lastChange = "2023-05-24 08:51:37 +0000";
+layers = (
+{
+layerId = m01;
+shapes = (
+{
+closed = 1;
+nodes = (
+(50,127,o),
+(68,110,o),
+(91,110,cs),
+(309,110,ls),
+(332,110,o),
+(350,127,o),
+(350,150,cs),
+(350,173,o),
+(332,190,o),
+(309,190,cs),
+(91,190,ls),
+(68,190,o),
+(50,173,o),
+(50,150,cs)
+);
+}
+);
+width = 400;
+}
+);
+unicode = 45;
+}
+);
+kerningLTR = {
+m01 = {
+hyphen = {
+"@MMK_R_.-" = 0;
+};
+period = {
+"@MMK_R_.-" = 0;
+};
+};
+};
+metrics = (
+{
+type = ascender;
+},
+{
+type = baseline;
+},
+{
+type = descender;
+},
+{
+type = "x-height";
+}
+);
+unitsPerEm = 1000;
+versionMajor = 1;
+versionMinor = 0;
+}

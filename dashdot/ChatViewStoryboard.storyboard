@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22146" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22122"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Chat View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="ChatViewController" id="Y6W-OH-hqX" customClass="ChatViewController" customModule="dashdot" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="VPY-tE-jYz">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <subviews>
+                                    <containerView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="393" placeholderIntrinsicHeight="852" translatesAutoresizingMaskIntoConstraints="NO" id="HAM-Vf-45s">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                        <connections>
+                                            <segue destination="TJQ-Ux-K0O" kind="embed" destinationCreationSelector="showHostingController:" id="GzH-o2-l5N"/>
+                                        </connections>
+                                    </containerView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="HAM-Vf-45s" firstAttribute="width" secondItem="Pvk-kp-K71" secondAttribute="width" id="2XP-63-Tw9"/>
+                                    <constraint firstItem="HAM-Vf-45s" firstAttribute="leading" secondItem="aEy-6c-oYs" secondAttribute="leading" id="3w6-ha-ifE"/>
+                                    <constraint firstItem="HAM-Vf-45s" firstAttribute="bottom" secondItem="aEy-6c-oYs" secondAttribute="bottom" id="DYT-wL-KzJ"/>
+                                    <constraint firstItem="HAM-Vf-45s" firstAttribute="trailing" secondItem="aEy-6c-oYs" secondAttribute="trailing" id="da9-tz-q8F"/>
+                                    <constraint firstItem="HAM-Vf-45s" firstAttribute="top" secondItem="aEy-6c-oYs" secondAttribute="top" id="i1B-fA-qPR"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="aEy-6c-oYs"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="Pvk-kp-K71"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="VPY-tE-jYz" secondAttribute="trailing" id="MFz-Fb-0bs"/>
+                            <constraint firstItem="VPY-tE-jYz" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="O4G-ZT-vwE"/>
+                            <constraint firstAttribute="bottom" secondItem="VPY-tE-jYz" secondAttribute="bottom" id="Zey-0m-Z8Z"/>
+                            <constraint firstItem="VPY-tE-jYz" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="oqv-0y-hOe"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="scrollView" destination="VPY-tE-jYz" id="mVV-tI-sdR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="113.74045801526717" y="3.5211267605633805"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="9FA-kw-u5O">
+            <objects>
+                <viewController id="TJQ-Ux-K0O" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lCj-W1-FG4">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nph-Lb-qLZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="889" y="4"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

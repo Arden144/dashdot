@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22146" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22122"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Input View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="InputViewController" id="Y6W-OH-hqX" customClass="InputViewController" customModule="FrThisTime" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4X2-Qi-egN" customClass="UIInputView">
+                                <rect key="frame" x="0.0" y="724" width="393" height="128"/>
+                                <subviews>
+                                    <containerView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="393" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="YBb-8X-bfI">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="128"/>
+                                        <connections>
+                                            <segue destination="NL3-xd-obo" kind="embed" destinationCreationSelector="showHostingController:" id="bTb-5U-gf5"/>
+                                        </connections>
+                                    </containerView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="YBb-8X-bfI" firstAttribute="top" secondItem="4X2-Qi-egN" secondAttribute="top" id="3aw-MZ-cK0"/>
+                                    <constraint firstAttribute="bottom" secondItem="YBb-8X-bfI" secondAttribute="bottom" id="CJc-WP-4AV"/>
+                                    <constraint firstAttribute="trailing" secondItem="YBb-8X-bfI" secondAttribute="trailing" id="MkL-rI-fXW"/>
+                                    <constraint firstItem="YBb-8X-bfI" firstAttribute="leading" secondItem="4X2-Qi-egN" secondAttribute="leading" id="z3b-Tc-XNR"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="4X2-Qi-egN" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="BPh-r8-nU3"/>
+                            <constraint firstAttribute="trailing" secondItem="4X2-Qi-egN" secondAttribute="trailing" id="e0I-Yl-hGV"/>
+                            <constraint firstAttribute="bottom" secondItem="4X2-Qi-egN" secondAttribute="bottom" id="ne1-Ye-EOD"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="mountedInputView" destination="4X2-Qi-egN" id="iHx-y8-wnz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="109" y="4"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="Ssj-ey-rbX">
+            <objects>
+                <viewController id="NL3-xd-obo" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="HVH-hu-Lyz">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="128"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="DAC-Yn-xeo"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GB8-2z-Uqy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="944" y="4"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
