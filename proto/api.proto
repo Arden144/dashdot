@@ -1,0 +1,23 @@
+syntax = "proto3";
+package api;
+
+import "sync.proto";
+import "msg.proto";
+import "auth.proto";
+import "push.proto";
+
+service Chat {
+    rpc Sync (sync.SyncInfo) returns (stream sync.Events);
+
+	rpc SendMsg (msg.NewMsg) returns (msg.MsgSent);
+}
+
+service Auth {
+	rpc PreAuth (auth.NewSession) returns (auth.Session);
+    rpc Auth (auth.NewAuth) returns (auth.Auth);
+	rpc Renew (auth.Renew) returns (auth.Auth);
+}
+
+service Push {
+    rpc Register (push.Register) returns (push.Registered);
+}

@@ -25,18 +25,36 @@ mod siwa;
 mod stream;
 mod update;
 
+use migration::{Migrator, MigratorTrait};
 use prelude::*;
+
+async fn connect_db(opt: impl Into<sea_orm::ConnectOptions> + Clone) -> DatabaseConnection {
+    let mut interval = tokio::time::interval(Duration::new(3, 0));
+    loop {
+        interval.tick().await;
+        match Database::connect(opt.clone()).await {
+            Ok(db) => return db,
+            Err(err) => {
+                log::warn!("failed to connect to the database: {err:?}");
+            }
+        }
+    }
+}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenv()?;
     pretty_env_logger::init();
 
+    log::info!("starting dashdot");
+
     let db_url = env::var("DATABASE_URL").context("missing DATABASE_URL in .env")?;
-    let messenger = Messenger::new();
-    let db = Database::connect(db_url)
+    let db = connect_db(db_url).await;
+    Migrator::up(&db, None)
         .await
-        .context("failed to connect to the database")?;
+        .context("failed to run database migrations")?;
+
+    let messenger = Messenger::new();
 
     let updater = Updater::builder()
         .register_source(db::user::UserUpdateSource::new(db.clone()))

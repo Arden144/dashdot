@@ -1,4 +1,5 @@
 target/
 secrets/
+data/
 .env
 .DS_Store

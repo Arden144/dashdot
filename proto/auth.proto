@@ -1,0 +1,25 @@
+syntax = "proto3";
+package auth;
+
+message NewSession {}
+
+message Session {
+	string nonce = 1;
+}
+
+message NewAuth {
+	string identity_token = 1;
+    string authorization_code = 2;
+	string full_name = 3;
+	string email = 4;
+}
+
+message Auth {
+    string access_token = 1;
+	string refresh_token = 2;
+	int32 user_id = 3;
+}
+
+message Renew {
+	string refresh_token = 1;
+}
