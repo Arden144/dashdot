@@ -2,7 +2,7 @@ use crate::prelude::{oauth::*, *};
 
 static ENCODING_KEY: LazyLock<EncodingKey> = LazyLock::new(|| {
     let private_key = fs::read("secrets/ec-private.pem").expect("failed to read private key");
-    EncodingKey::from_ec_pem(&private_key).unwrap()
+    EncodingKey::from_ec_pem(&private_key).expect("failed to decode private key")
 });
 
 pub async fn issue(db: &DatabaseConnection, user: db::user::Model) -> Result<Tokens, OAuthError> {

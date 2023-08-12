@@ -6,7 +6,7 @@ static CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
     reqwest::Client::builder()
         .http2_prior_knowledge()
         .build()
-        .unwrap()
+        .expect("failed to build http client")
 });
 
 #[derive(Debug, Deserialize)]

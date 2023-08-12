@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 static DECODING_KEY: LazyLock<DecodingKey> = LazyLock::new(|| {
     let public_key = fs::read("secrets/public.pem").expect("failed to read public key");
-    DecodingKey::from_ec_pem(&public_key).unwrap()
+    DecodingKey::from_ec_pem(&public_key).expect("failed to decode public key")
 });
 
 pub fn auth(mut request: Request<()>) -> Result<Request<()>, Status> {

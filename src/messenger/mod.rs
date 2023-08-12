@@ -53,8 +53,10 @@ impl Messenger {
         info!("sending event to users: {:?}", ids);
         info!("event: {:?}", events);
         // TODO: This is a hack for testing only
-        let db_url = env::var("DATABASE_URL").unwrap();
-        let db = Database::connect(db_url).await.unwrap();
+        let db_url = env::var("DATABASE_URL").expect("failed to get DATABASE_URL from environment");
+        let db = Database::connect(db_url)
+            .await
+            .expect("failed to connect to the database");
         for id in ids {
             if let Some(mut conn) = self.conn.get_mut(&id) {
                 info!("user {id} is connected");
@@ -74,8 +76,8 @@ impl Messenger {
                     if let Some(sync::event::Type::Msg(ref msg)) = event.r#type {
                         let user = db::user::user_by_id(&db, msg.user_id)
                             .await
-                            .unwrap()
-                            .unwrap()
+                            .expect("failed to get user for push notifications")
+                            .expect("invalid user id")
                             .into();
                         info!("sending push notification");
                         send_notification(&device_token, msg, &user).await?;

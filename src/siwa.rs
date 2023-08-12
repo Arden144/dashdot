@@ -37,7 +37,7 @@ static CLIENT_ID: LazyLock<&'static str> = LazyLock::new(|| {
 
 static ENCODING_KEY: LazyLock<EncodingKey> = LazyLock::new(|| {
     let private_key = fs::read("secrets/siwa-private.p8").expect("failed to read private key");
-    EncodingKey::from_ec_pem(&private_key).unwrap()
+    EncodingKey::from_ec_pem(&private_key).expect("failed to decode private key")
 });
 
 static CLIENT: LazyLock<reqwest::Client> = LazyLock::new(reqwest::Client::new);
@@ -149,8 +149,8 @@ async fn decode_identity_token(token: &str) -> anyhow::Result<TokenData<Identity
 
     let header = decode_header(token).context("failed to decode identity token header")?;
     let Some(kid) = header.kid else {
-		return Err(SIWAError::MissingKID.into())
-	};
+        return Err(SIWAError::MissingKID.into());
+    };
 
     let jwk = jwks
         .keys
