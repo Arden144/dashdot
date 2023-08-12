@@ -6,6 +6,8 @@ services:
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - ./data:/var/lib/postgresql/data/
+    networks:
+      - backend
   dashdot:
     build: .
     environment:
@@ -13,6 +15,8 @@ services:
     volumes:
       - ./.env:/.env
       - ./secrets:/secrets
+    networks:
+      - backend
   envoy:
     image: envoyproxy/envoy:distroless-dev-3007db0651fe4732751efe6a4239b1a02bb6e05f
     ports:
@@ -20,3 +24,7 @@ services:
     volumes:
       - ./envoy.yaml:/envoy.yaml
     command: ["-c", "/envoy.yaml"]
+    networks:
+      - backend
+networks:
+  backend:
