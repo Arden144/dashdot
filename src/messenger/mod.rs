@@ -40,6 +40,7 @@ impl Messenger {
     }
 
     pub fn register(&self, id: i32, device_token: Box<[u8]>) {
+        info!("user {id} registered for push notifications");
         self.push.insert(id, device_token);
     }
 
