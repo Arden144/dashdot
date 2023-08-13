@@ -1,4 +1,4 @@
-use crate::prelude::{apns::*, *};
+use crate::prelude::{api::*, apns::*, *};
 
 static ENDPOINT: &'static str = "https://api.sandbox.push.apple.com";
 
@@ -19,8 +19,8 @@ pub(super) struct APNsErrorResponse {
 
 pub async fn send_notification(
     device_token: &[u8],
-    msg: &api::msg::Msg,
-    user: &api::user::User,
+    msg: &msg::Msg,
+    user: &user::User,
 ) -> Result<(), PushError> {
     let payload = json!({
         "aps": {

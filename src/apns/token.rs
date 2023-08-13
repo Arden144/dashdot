@@ -28,6 +28,7 @@ struct Token {
 }
 
 pub(super) fn create_token() -> Result<String, PushError> {
+    info!("creating new apns token");
     let time = current_time().as_secs();
 
     let mut header = Header::new(Algorithm::ES256);

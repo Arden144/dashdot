@@ -35,7 +35,7 @@ async fn connect_db(opt: impl Into<sea_orm::ConnectOptions> + Clone) -> Database
         match Database::connect(opt.clone()).await {
             Ok(db) => return db,
             Err(err) => {
-                log::warn!("failed to connect to the database: {err:?}");
+                warn!("failed to connect to the database: {err:?}");
             }
         }
     }
@@ -43,10 +43,9 @@ async fn connect_db(opt: impl Into<sea_orm::ConnectOptions> + Clone) -> Database
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    dotenv()?;
     pretty_env_logger::init();
-
-    log::info!("starting dashdot");
+    info!("starting dashdot");
+    dotenv()?;
 
     let db_url = env::var("DATABASE_URL").context("missing DATABASE_URL in .env")?;
     let db = connect_db(db_url).await;
