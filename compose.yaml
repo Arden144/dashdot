@@ -11,7 +11,7 @@ services:
   dashdot:
     build: .
     environment:
-      RUST_LOG: "infi,sqlx::query=warn"
+      RUST_LOG: "info,sqlx::query=warn"
     volumes:
       - ./.env:/app/.env
       - ./secrets:/app/secrets
