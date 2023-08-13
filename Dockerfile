@@ -17,6 +17,7 @@ RUN cargo build --release
 
 FROM debian:bullseye-slim AS runtime
 WORKDIR /app
+RUN apt-get update && apt-get install -y ca-certificates
 COPY --from=builder /app/target/release/dashdotserver /usr/local/bin
 CMD ["/usr/local/bin/dashdotserver"]
 EXPOSE 9090
