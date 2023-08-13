@@ -13,8 +13,8 @@ services:
     environment:
       RUST_LOG: "debug,sqlx::query=warn"
     volumes:
-      - ./.env:/.env
-      - ./secrets:/secrets
+      - ./.env:/app/.env
+      - ./secrets:/app/secrets
     networks:
       - backend
   envoy:
