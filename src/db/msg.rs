@@ -28,7 +28,7 @@ impl UpdateSource for MsgUpdateSource {
             .explanation("failed to get messages sent to user from database")?
             .into_iter()
             .flat_map(|(_, messages)| messages)
-            .inspect(|msg| info!("sending msg: {:?}", msg))
+            .inspect(|msg| debug!("sending msg: {:?}", msg))
             .collect())
     }
 }

@@ -51,7 +51,7 @@ impl Messenger {
     ) -> Result<(), MessengerError> {
         let ids: Vec<i32> = ids.into_iter().collect();
         info!("sending event to users: {:?}", ids);
-        info!("event: {:?}", events);
+        debug!("event: {:?}", events);
         // TODO: This is a hack for testing only
         let db_url = env::var("DATABASE_URL").expect("failed to get DATABASE_URL from environment");
         let db = Database::connect(db_url)
@@ -79,7 +79,6 @@ impl Messenger {
                             .expect("failed to get user for push notifications")
                             .expect("invalid user id")
                             .into();
-                        info!("sending push notification");
                         send_notification(&device_token, msg, &user).await?;
                     } else {
                         warn!("unsupported event type for push notification");

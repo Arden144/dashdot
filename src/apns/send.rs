@@ -22,6 +22,7 @@ pub async fn send_notification(
     msg: &msg::Msg,
     user: &user::User,
 ) -> Result<(), PushError> {
+    debug!("sending push notification to user {}", user.id);
     let payload = json!({
         "aps": {
             "alert": {
