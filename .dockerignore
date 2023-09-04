@@ -1,0 +1,12 @@
+.git/
+target/
+.DS_Store
+.gitignore
+
+data/
+compose.yaml
+envoy.yaml
+start.sh
+
+secrets/
+.env
