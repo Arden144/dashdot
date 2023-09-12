@@ -16,7 +16,7 @@ struct User: Identifiable, Equatable, Hashable, Codable, PersistableRecord, Fetc
     var username: String
     
     static let messages = hasMany(Message.self)
-    static let conversations = hasMany(Conversation.self, through: User.hasMany(UserConversation.self), using: UserConversation.conversation)
+    static let conversations = hasMany(Conversation.self, through: hasMany(UserConversation.self), using: UserConversation.conversation)
     
     static let persistenceConflictPolicy = PersistenceConflictPolicy(insert: .replace, update: .replace)
 }
@@ -27,7 +27,7 @@ extension User {
         
         static var defaultValue: User? = nil
         
-        func publisher(in database: Database<DatabaseQueue>) -> some Publisher<User?, Error> {
+        func publisher(in database: Database) -> some Publisher<User?, Error> {
             ValueObservation
                 .tracking { db in
                     guard let userID = userID else { return nil }

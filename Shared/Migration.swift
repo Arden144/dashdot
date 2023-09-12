@@ -31,28 +31,32 @@ let migration = {
             t.primaryKey("id", .integer)
             t.column("createdAt", .datetime).notNull()
             t.column("body", .text).notNull()
-            t.column("authorId", .integer)
-                .notNull()
-                .indexed()
-                .references("user")
-            t.column("conversationId", .integer)
-                .notNull()
-                .indexed()
-                .references("conversation")
+//            t.column("authorId", .integer)
+//                .notNull()
+//                .indexed()
+//                .references("user")
+//            t.column("conversationId", .integer)
+//                .notNull()
+//                .indexed()
+//                .references("conversation")
+            t.belongsTo("author", inTable: "user").notNull()
+            t.belongsTo("conversation").notNull()
         }
     }
     
     migrator.registerMigration("createUserConversations") { db in
         try db.create(table: "userConversation") { t in
             t.primaryKey {
-                t.column("userId", .integer)
-                    .notNull()
-                    .indexed()
-                    .references("user")
-                t.column("conversationId", .integer)
-                    .notNull()
-                    .indexed()
-                    .references("conversation")
+//                t.column("userId", .integer)
+//                    .notNull()
+//                    .indexed()
+//                    .references("user")
+//                t.column("conversationId", .integer)
+//                    .notNull()
+//                    .indexed()
+//                    .references("conversation")
+                t.belongsTo("user").notNull()
+                t.belongsTo("conversation").notNull()
             }
         }
     }

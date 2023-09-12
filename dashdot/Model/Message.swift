@@ -40,7 +40,7 @@ extension DetailedMessage {
         static var defaultValue = [DetailedMessage]()
         var conversation: DetailedConversation
         
-        func publisher(in database: Database<DatabaseQueue>) -> some Publisher<[DetailedMessage], Error> {
+        func publisher(in database: Database) -> some Publisher<[DetailedMessage], Error> {
             ValueObservation
                 .tracking { db in try conversation.conversation.messages
                     .annotated(withOptional: Message.author

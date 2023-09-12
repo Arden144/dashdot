@@ -16,7 +16,7 @@ extension ProtocolClient {
         return ProtocolClient(
             httpClient: URLSessionHTTPClient(configuration: configuration),
             config: ProtocolClientConfig(
-                host: "http://192.168.1.68:8080",
+                host: "http://vps.ardensinclair.com:8080",
                 networkProtocol: .grpcWeb,
                 codec: ProtoCodec(),
                 interceptors: [{ _ in AuthInterceptor.shared }]

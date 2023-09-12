@@ -6,8 +6,10 @@
 //
 
 import UserNotifications
+import OSLog
 
 class NotificationService: UNNotificationServiceExtension {
+    static let logger = Logger(subsystem: "com.ardensinclair.dashdot.push", category: "NotificationService")
 
     var contentHandler: ((UNNotificationContent) -> Void)?
     var bestAttemptContent: UNMutableNotificationContent?
@@ -15,6 +17,8 @@ class NotificationService: UNNotificationServiceExtension {
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         self.contentHandler = contentHandler
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
+        
+        let db = createSharedDatabase(logger: Self.logger)
         
         if let bestAttemptContent {
             // Modify the notification content here...
@@ -31,5 +35,4 @@ class NotificationService: UNNotificationServiceExtension {
             contentHandler(bestAttemptContent)
         }
     }
-
 }

@@ -15,7 +15,7 @@ struct Conversation: Identifiable, Equatable, Hashable, Codable, PersistableReco
     var createdAt: Date
     
     static let messages = hasMany(Message.self).order(Column("createdAt"))
-    static let members = hasMany(User.self, through: Conversation.hasMany(UserConversation.self), using: UserConversation.user)
+    static let members = hasMany(User.self, through: hasMany(UserConversation.self), using: UserConversation.user)
     
     static let persistenceConflictPolicy = PersistenceConflictPolicy(insert: .replace, update: .replace)
     
@@ -62,7 +62,7 @@ extension DetailedConversation {
     struct Request: Queryable {
         static var defaultValue = [DetailedConversation]()
         
-        func publisher(in database: Database<DatabaseQueue>) -> some Publisher<[DetailedConversation], Error> {
+        func publisher(in database: Database) -> some Publisher<[DetailedConversation], Error> {
             ValueObservation
                 .tracking { db in try DetailedConversation.request.fetchAll(db) }
                 .publisher(in: database.writer, scheduling: .immediate)
