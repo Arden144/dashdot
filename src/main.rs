@@ -30,13 +30,12 @@ use prelude::*;
 
 async fn connect_db(opt: impl Into<sea_orm::ConnectOptions> + Clone) -> DatabaseConnection {
     let mut interval = tokio::time::interval(Duration::new(3, 0));
+    interval.set_missed_tick_behavior(MissedTickBehavior::Delay);
     loop {
         interval.tick().await;
         match Database::connect(opt.clone()).await {
             Ok(db) => return db,
-            Err(err) => {
-                warn!("failed to connect to the database: {err:?}");
-            }
+            Err(err) => warn!("failed to connect to the database: {err:?}"),
         }
     }
 }
@@ -53,7 +52,7 @@ async fn main() -> anyhow::Result<()> {
         .await
         .context("failed to run database migrations")?;
 
-    let messenger = Messenger::new();
+    let messenger = Messenger::new(db.clone());
 
     let updater = Updater::builder()
         .register_source(db::user::UserUpdateSource::new(db.clone()))

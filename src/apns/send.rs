@@ -25,12 +25,13 @@ pub async fn send_notification(
     debug!("sending push notification to user {}", user.id);
     let payload = json!({
         "aps": {
+            "category": "MESSAGE",
+            "mutable-content": 1,
             "alert": {
                 "title": "New message",
                 "subtitle": user.name,
                 "body": msg.text
-            },
-            "category": "MESSAGE"
+            }
         },
         "msgID": msg.id,
         "userID": msg.user_id,

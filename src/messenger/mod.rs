@@ -2,6 +2,7 @@ use crate::prelude::{api::*, *};
 
 #[derive(Clone)]
 pub struct Messenger {
+    db: DatabaseConnection,
     conn: Arc<DashMap<i32, Sender<sync::Events>>>,
     push: Arc<DashMap<i32, Box<[u8]>>>,
 }
@@ -15,8 +16,9 @@ pub enum MessengerError {
 }
 
 impl Messenger {
-    pub fn new() -> Self {
+    pub fn new(db: DatabaseConnection) -> Self {
         Self {
+            db,
             conn: Arc::new(DashMap::new()),
             push: Arc::new(DashMap::new()),
         }
@@ -53,11 +55,7 @@ impl Messenger {
         let ids: Vec<i32> = ids.into_iter().collect();
         info!("sending event to users: {:?}", ids);
         debug!("event: {:?}", events);
-        // TODO: This is a hack for testing only
-        let db_url = env::var("DATABASE_URL").expect("failed to get DATABASE_URL from environment");
-        let db = Database::connect(db_url)
-            .await
-            .expect("failed to connect to the database");
+
         for id in ids {
             if let Some(mut conn) = self.conn.get_mut(&id) {
                 info!("user {id} is connected");
