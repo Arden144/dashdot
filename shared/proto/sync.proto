@@ -1,0 +1,26 @@
+syntax = "proto3";
+package sync;
+
+import "user.proto";
+import "chat.proto";
+import "msg.proto";
+import "member.proto";
+import "google/protobuf/timestamp.proto";
+
+message SyncInfo {
+  google.protobuf.Timestamp last_updated = 1;
+}
+
+message Event {
+  oneof type {
+    chat.Chat chat = 1;
+    msg.Msg msg = 2;
+    user.User user = 3;
+    member.Member member = 4;
+  }
+}
+
+message Events {
+    google.protobuf.Timestamp last_updated = 1;
+    repeated Event events = 2;
+}

@@ -1,0 +1,11 @@
+version: v1
+plugins:
+  - plugin: buf.build/bufbuild/connect-swift
+    opt: Visibility=Public
+    out: client/dashdot/Generated
+  - plugin: buf.build/apple/swift
+    opt: Visibility=Public
+    out: client/dashdot/Generated
+  - plugin: buf.build/bufbuild/connect-swift-mocks
+    opt: Visibility=Public
+    out: client/dashdot/GeneratedMocks
