@@ -3,15 +3,15 @@ use std::error::Error;
 fn main() -> Result<(), Box<dyn Error>> {
     tonic_build::configure().build_client(false).compile(
         &[
-            "./proto/msg.proto",
-            "./proto/user.proto",
-            "./proto/chat.proto",
-            "./proto/sync.proto",
-            "./proto/auth.proto",
-            "./proto/push.proto",
-            "./proto/api.proto",
+            "../shared/proto/msg.proto",
+            "../shared/proto/user.proto",
+            "../shared/proto/chat.proto",
+            "../shared/proto/sync.proto",
+            "../shared/proto/auth.proto",
+            "../shared/proto/push.proto",
+            "../shared/proto/api.proto",
         ],
-        &["./proto"],
+        &["../shared/proto"],
     )?;
     Ok(())
 }

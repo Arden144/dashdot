@@ -73,7 +73,7 @@ impl Messenger {
                 info!("user {id} is available for push notifications");
                 for event in events.events.iter() {
                     if let Some(sync::event::Type::Msg(ref msg)) = event.r#type {
-                        let user = db::user::user_by_id(&db, msg.user_id)
+                        let user = db::user::user_by_id(&self.db, msg.user_id)
                             .await
                             .expect("failed to get user for push notifications")
                             .expect("invalid user id")
