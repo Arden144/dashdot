@@ -1,0 +1,8 @@
+syntax = "proto3";
+package push;
+
+message Register {
+    bytes device_token = 1;
+}
+
+message Registered {}

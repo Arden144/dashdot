@@ -1,0 +1,9 @@
+syntax = "proto3";
+package chat;
+
+import "google/protobuf/timestamp.proto";
+
+message Chat {
+	int32 id = 1;
+	google.protobuf.Timestamp date = 2;
+}
